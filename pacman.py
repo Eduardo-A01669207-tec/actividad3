@@ -131,7 +131,7 @@ def move():
     dot(20, 'yellow')
 
     for point, course in ghosts:
-        if valid(point + course):
+        if valid (point + course):
             point.move(course)
         else:
             options = [
@@ -139,16 +139,21 @@ def move():
                 vector(-5, 0),
                 vector(0, 5),
                 vector(0, -5),
-            ]
-            plan = choice(options)
-            course.x = plan.x
-            course.y = plan.y
+                    ]
+            valid_options = [opt for opt in options if valid(point + opt)]
+
+            if valid_options:
+                best_plan = min(valid_options, key=lambda opt: abs(pacman - (point + opt)))
+
+            course.x = best_plan.x
+            course.y = best_plan.y
+            point.move(course)
 
         up()
         goto(point.x + 10, point.y + 10)
         dot(20, 'red')
-
-    update()
+    
+        update()
 
     for point, course in ghosts:
         if abs(pacman - point) < 20:
